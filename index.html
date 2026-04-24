@@ -25,13 +25,13 @@
   window.VERTICAL = {
     key: 'seguros',
     label: 'Seguros',
-    preTitle: 'Sponsorship Seguros · Edición I · 2026',
+    preTitle: 'Participación Institucional · Seguros · 2026',
     tierLabel: 'Seguros',
-    tierNames: ['ORO', 'PLATA', 'BRONCE'],
+    tierNames: ['IMPULSORA', 'COLABORADORA', 'PARTICIPANTE'],
     tiers: [
-      { name: 'Oro',    total: 2, remaining: 2, price: 9000 },
-      { name: 'Plata',  total: 4, remaining: 3, price: 6000 },
-      { name: 'Bronce', total: 6, remaining: 5, price: 3000 }
+      { name: 'Entidad Impulsora',     total: 3, remaining: 2, price: 12000 },
+      { name: 'Entidad Colaboradora',  total: 5, remaining: 3, price: 6000  },
+      { name: 'Entidad Participante',  total: 8, remaining: 8, price: 0     }
     ]
   };
 </script>
@@ -39,7 +39,7 @@
 <script type="text/babel">
   const vertical = Object.assign({}, window.VERTICAL, {
     heroTitle: <>Lidere la <em>nueva era</em> de los seguros con IA Agéntica.</>,
-    heroSub: 'Conecte con CEOs, CTOs y Chief AI Officers del sector asegurador. Suscripción automatizada, gestión de siniestros con agentes autónomos, federated learning entre compañías.'
+    heroSub: 'El único foro en España donde los máximos responsables del sector asegurador debaten el impacto real de los agentes autónomos en suscripción, siniestros y distribución. Alta dirección · Regla Chatham House · Sala mayoritariamente de entidades del sector, aforo curado.'
   });
   ReactDOM.createRoot(document.getElementById('root')).render(<Page vertical={vertical} />);
 </script>

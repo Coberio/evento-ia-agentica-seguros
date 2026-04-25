@@ -633,14 +633,19 @@ function BookCall({ vertical }) {
 
 // ---------- Formulario de adhesión (Tally embed) ----------
 function Adhesion({ vertical }) {
+  const iframeRef = useRef(null);
   useEffect(() => {
-    const load = () => window.Tally && window.Tally.loadEmbeds && window.Tally.loadEmbeds();
-    if (window.Tally) { load(); return; }
-    const s = document.createElement('script');
-    s.src = 'https://tally.so/widgets/embed.js';
-    s.async = true;
-    s.onload = load;
-    document.body.appendChild(s);
+    const onMsg = (e) => {
+      if (e.origin !== 'https://tally.so') return;
+      try {
+        const d = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+        if (d && d.event === 'Tally.FormHeightChanged' && iframeRef.current) {
+          iframeRef.current.style.height = d.payload.height + 'px';
+        }
+      } catch (_) {}
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
   }, []);
   return (
     <section className="section" id="adhesion">
@@ -652,13 +657,11 @@ function Adhesion({ vertical }) {
         </div>
         <div style={{ maxWidth: 780, margin: '0 auto', background: 'var(--bg-1)', border: '1px solid var(--line)', borderRadius: 'var(--r-xl)', padding: 32 }}>
           <iframe
-            data-tally-src="https://tally.so/embed/obVl7N?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
-            loading="lazy"
+            ref={iframeRef}
+            src="https://tally.so/embed/obVl7N?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
             width="100%"
             height="480"
             frameBorder="0"
-            marginHeight="0"
-            marginWidth="0"
             title="Formulario de Adhesión"
             style={{ border: 0, display: 'block', background: 'transparent' }}
           />

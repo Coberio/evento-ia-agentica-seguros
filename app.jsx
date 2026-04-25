@@ -1,7 +1,39 @@
-// Shared page components for all 3 sponsor landings
-// Expects window.VERTICAL = { key, label, accent, accentGlow, accentInk, tiers: {gold, silver, bronze}, title, subtitle, tierLabel }
+// Sponsor landing — Seguros vertical
+// Expects window.VERTICAL = { key, label, preTitle, tierLabel, tierNames, tiers }
 
-const { useState, useEffect, useMemo } = React;
+const { useState, useEffect, useMemo, useRef, useCallback } = React;
+
+// ---------- Scroll-reveal hook ----------
+function useInView(threshold = 0.15) {
+  const ref = useRef(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    if (!ref.current) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setInView(true); observer.disconnect(); }
+    }, { threshold });
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [threshold]);
+  return [ref, inView];
+}
+
+// ---------- Animated counter hook ----------
+function useCounter(target, active, duration = 1400) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    const start = Date.now();
+    const tick = () => {
+      const t = Math.min(1, (Date.now() - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setVal(Math.round(eased * target));
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [active, target, duration]);
+  return val;
+}
 
 // ---------- Icons ----------
 const IconCheck = ({ size = 14 }) => (
@@ -26,12 +58,6 @@ const IconClock = () => (
     <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
   </svg>
 );
-const IconCam = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="23 7 16 12 23 17 23 7"></polygon>
-    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
-  </svg>
-);
 const IconGlobe = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <circle cx="12" cy="12" r="10"></circle>
@@ -53,7 +79,7 @@ function Nav({ vertical }) {
       <div className="urgency-strip">
         Plazas de participación muy limitadas · <strong>Edición inaugural · 16 de junio</strong> · Auditorio Beatriz, Madrid
       </div>
-      <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
+      <nav className={`nav ${scrolled ? 'scrolled' : ''}`} aria-label="Navegación principal">
         <div className="nav-inner">
           <a href="#" className="brand">
             <span className="brand-dot"></span>
@@ -65,7 +91,7 @@ function Nav({ vertical }) {
             <a href="#verticales">Verticales</a>
             <a href="#agenda">Agenda</a>
             <a href="#paquetes">Paquetes</a>
-            <a href="#reservar" className="btn btn-ghost btn-sm">Reservar llamada <IconArrow /></a>
+            <a href="#reservar" className="btn btn-ghost btn-sm">Hablar con el equipo <IconArrow /></a>
           </div>
         </div>
       </nav>
@@ -108,10 +134,14 @@ function Hero({ vertical }) {
                 <span className="label">Formato</span>
                 <span className="value">Presencial · Chatham House</span>
               </div>
+              <div>
+                <span className="label">Mercado</span>
+                <span className="value">~57.000 M€ primas sector 2024</span>
+              </div>
             </div>
             <div className="hero-cta">
               <a href="#reservar" className="btn btn-primary">
-                Reservar llamada con el equipo <IconArrow />
+                Hablar con el equipo <IconArrow />
               </a>
               <a href="#paquetes" className="btn btn-ghost">Ver paquetes</a>
             </div>
@@ -168,58 +198,58 @@ function useCountdown(isoTarget) {
 
 // ---------- Stats ----------
 function Stats() {
+  const [ref, inView] = useInView(0.4);
+  const c150 = useCounter(150, inView, 1200);
+  const c3000 = useCounter(3000, inView, 1600);
   return (
-    <section className="stats-row">
-      <div className="stat"><div className="num">150</div><div className="label">Directivos C-Level</div></div>
-      <div className="stat"><div className="num">6</div><div className="label">Verticales Temáticas</div></div>
-      <div className="stat"><div className="num">3.000+</div><div className="label">Alumni IIA Movilizados</div></div>
-      <div className="stat"><div className="num">1ª</div><div className="label">Edición en España</div></div>
-    </section>
+    <div className="stats-bar" ref={ref}>
+      <div className="stats-bar-item">
+        <div className="stats-bar-num">{inView ? c150 : 0}</div>
+        <div className="stats-bar-label">Directivos C-Level</div>
+      </div>
+      <div className="stats-bar-item">
+        <div className="stats-bar-num">+7%</div>
+        <div className="stats-bar-label">Crecimiento anual del sector</div>
+      </div>
+      <div className="stats-bar-item">
+        <div className="stats-bar-num">{inView ? c3000.toLocaleString('es-ES') : 0}+</div>
+        <div className="stats-bar-label">Alumni IIA</div>
+      </div>
+      <div className="stats-bar-item">
+        <div className="stats-bar-num">1ª</div>
+        <div className="stats-bar-label">Edición en España</div>
+      </div>
+    </div>
   );
 }
 
 // ---------- Sobre el Foro ----------
 function AboutForo() {
+  const [ref, inView] = useInView();
   return (
-    <section className="section" id="foro">
-      <div className="container">
+    <section className="section" id="foro" ref={ref}>
+      <div className={`container reveal ${inView ? 'in-view' : ''}`}>
         <div className="section-header">
           <span className="eyebrow">El Foro</span>
-          <h2>El primer foro en España dedicado a la <em style={{ fontStyle: 'italic' }}>IA Agéntica</em> para banca y seguros.</h2>
-          <p className="lead">Un encuentro único diseñado para reunir a los máximos responsables de la industria en un espacio de diálogo estratégico de alto nivel. Sin intermediarios, sin comerciales.</p>
+          <h2>El primer foro en España dedicado a la <em style={{ fontStyle: 'italic' }}>IA Agéntica</em> para el sector asegurador.</h2>
+          <p className="lead">Un encuentro único diseñado para reunir a los máximos responsables de compañías aseguradoras en un espacio de diálogo estratégico de alto nivel. Sin intermediarios, sin comerciales.</p>
         </div>
 
         <div className="reasons-grid">
-          <div className="reason">
-            <div className="reason-num">01</div>
-            <h3>Liderazgo sectorial</h3>
-            <p>Posicionarse como una de las entidades que impulsa la conversación seria sobre IA Agéntica en seguros. No asistir al debate — liderarlo.</p>
-          </div>
-          <div className="reason">
-            <div className="reason-num">02</div>
-            <h3>Posicionamiento institucional</h3>
-            <p>Vuestra entidad quedará asociada a la adopción responsable, regulada y con criterio de la IA Agéntica en el sector asegurador, antes de que el mercado esté saturado.</p>
-          </div>
-          <div className="reason">
-            <div className="reason-num">03</div>
-            <h3>Contribución editorial real</h3>
-            <p>Un directivo de vuestra entidad participa en mesas sobre suscripción, siniestros o distribución aseguradora junto a pares del sector. Sin charlas comerciales, sin feria de proveedores.</p>
-          </div>
-          <div className="reason">
-            <div className="reason-num">04</div>
-            <h3>Scouting cualificado</h3>
-            <p>Acceso privado a los proveedores de IA más relevantes, ya filtrados por SegurosIA. Detectad soluciones para siniestros, suscripción y distribución sin necesidad de ir a ferias masivas.</p>
-          </div>
-          <div className="reason">
-            <div className="reason-num">05</div>
-            <h3>Activo interno para el comité</h3>
-            <p>Post-evento: informe ejecutivo con benchmark del sector asegurador, mapa de proveedores, casos de uso en producción y riesgos detectados. Material directo para vuestro comité de dirección.</p>
-          </div>
-          <div className="reason">
-            <div className="reason-num">06</div>
-            <h3>Marco regulatorio integrado</h3>
-            <p>DGSFP, DORA, AI Act y Sandbox Financiero forman parte del programa, no son un añadido. El foro está avalado por los organismos reguladores del sector.</p>
-          </div>
+          {[
+            ['01', 'Liderazgo sectorial', 'Posicionarse como una de las compañías que impulsa la conversación seria sobre IA Agéntica en seguros. No asistir al debate: liderarlo.'],
+            ['02', 'Posicionamiento institucional', 'Los agentes de IA están transformando suscripción, siniestros y distribución. Las compañías que encabecen esa conversación ahora determinarán los estándares del sector antes de que otros lo hagan.'],
+            ['03', 'Contribución editorial real', 'Un directivo de vuestra compañía participa en una mesa de alto nivel junto a pares del sector. El programa es curado: sin charlas comerciales, sin feria de proveedores.'],
+            ['04', 'Scouting cualificado', 'Acceso privado a soluciones específicas para aseguradoras: underwriting automation, FNOL y liquidación de siniestros con IA, detección de fraude, modelos predictivos de churn y pricing dinámico. Sin ferias masivas.'],
+            ['05', 'Activo interno para el comité', 'Post-evento: informe ejecutivo con benchmark del sector asegurador, mapa de proveedores, casos de uso en producción y riesgos detectados. Material directo para vuestro comité de dirección.'],
+            ['06', 'Marco regulatorio integrado', 'AI Act (sistemas de alto riesgo en Vida/Salud), Solvency II, DORA, IDD y supervisión DGSFP forman parte del programa desde el diseño, no son un añadido. Avalado por AEPD y DGSFP en el Sandbox Financiero.'],
+          ].map(([num, title, desc], i) => (
+            <div className={`reason reveal reveal-delay-${i + 1} ${inView ? 'in-view' : ''}`} key={num}>
+              <div className="reason-num">{num}</div>
+              <h3>{title}</h3>
+              <p>{desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -228,9 +258,10 @@ function AboutForo() {
 
 // ---------- Quiénes Somos ----------
 function About() {
+  const [ref, inView] = useInView();
   return (
-    <section className="section" id="quienes-somos">
-      <div className="container">
+    <section className="section" id="quienes-somos" ref={ref}>
+      <div className={`container reveal ${inView ? 'in-view' : ''}`}>
         <div className="section-header">
           <span className="eyebrow">Quiénes Somos</span>
           <h2>Organizado por SegurosIA en colaboración con el <em style={{ fontStyle: 'italic' }}>IIA</em>.</h2>
@@ -266,14 +297,15 @@ function About() {
 
 // ---------- El Momento ----------
 function Moment() {
+  const [ref, inView] = useInView();
   return (
-    <section className="section">
-      <div className="container-narrow">
+    <section className="section" ref={ref}>
+      <div className={`container-narrow reveal ${inView ? 'in-view' : ''}`}>
         <div className="moment-block">
           <span className="eyebrow" style={{ justifyContent: 'center' }}>2026 · Punto de inflexión</span>
           <h2 style={{ marginTop: 24 }}>El momento de la <em style={{ fontStyle: 'italic' }}>IA Agéntica</em>.</h2>
-          <p>Este foro nace cuando las entidades financieras necesitan entender no solo qué puede hacer la IA Agéntica, sino cómo implementarla de forma segura, ética y conforme a los nuevos marcos regulatorios europeos.</p>
-          <div className="highlight">Participar ahora = liderar la conversación antes de que otros lo hagan</div>
+          <p>Las aseguradoras que adopten agentes autónomos en suscripción, siniestros y distribución antes de 2027 fijarán los márgenes de referencia del sector. Las que esperen, competirán con las condiciones que otras hayan establecido.</p>
+          <div className="highlight">Participar ahora es liderar la conversación antes de que otros lo hagan</div>
         </div>
       </div>
     </section>
@@ -282,21 +314,22 @@ function Moment() {
 
 // ---------- Verticales ----------
 function Verticals() {
+  const [ref, inView] = useInView();
   const items = [
-    ['Estado del Arte de la IA Agéntica', 'Panorama global de los agentes de IA: dónde estamos, hacia dónde vamos y qué impacto real están teniendo en banca y seguros. Casos en producción y lecciones aprendidas.'],
+    ['Estado del Arte de la IA Agéntica', 'Panorama global de los agentes de IA: dónde estamos, hacia dónde vamos y qué impacto real están teniendo en seguros. Casos en producción, benchmarks y lecciones aprendidas.'],
     ['Guardrails, Compliance y Regulación', 'Cómo diseñar sistemas de IA Agéntica que cumplan con DORA, AI Act y normativa sectorial. Frameworks de gobernanza, auditoría algorítmica y control humano.'],
-    ['Federated Learning y Privacidad', 'Entrenamiento colaborativo de modelos sin compartir datos sensibles. IA Agéntica respetando privacidad y protección de datos.'],
-    ['Arquitecturas del Conocimiento', 'RAG, grafos de conocimiento y sistemas multiagente: las arquitecturas técnicas detrás de los agentes más avanzados del sector financiero.'],
-    ['Futuro de los Servicios de Software', 'Cómo la IA Agéntica redefine los modelos de negocio SaaS, la relación proveedor-cliente y la cadena de valor tecnológica.'],
-    ['Ciberseguridad e IA Agéntica', 'Nuevos vectores de amenaza que introducen los agentes autónomos y estrategias de defensa. Seguridad ofensiva y defensiva.'],
+    ['Federated Learning y Privacidad', 'Entrenamiento colaborativo de modelos sin compartir datos sensibles de pólizas o siniestros. IA Agéntica respetando privacidad y protección de datos.'],
+    ['Arquitecturas del Conocimiento', 'RAG, grafos de conocimiento y sistemas multiagente: las arquitecturas técnicas detrás de los agentes más avanzados del sector asegurador.'],
+    ['Futuro de los Servicios de Software', 'Cómo la IA Agéntica redefine los modelos de negocio SaaS, la relación proveedor-aseguradora y la cadena de valor tecnológica.'],
+    ['Ciberseguridad e IA Agéntica', 'Nuevos vectores de amenaza que introducen los agentes autónomos y estrategias de defensa. Seguridad ofensiva y defensiva en el contexto asegurador.'],
   ];
   return (
-    <section className="section" id="verticales">
-      <div className="container">
+    <section className="section" id="verticales" ref={ref}>
+      <div className={`container reveal ${inView ? 'in-view' : ''}`}>
         <div className="section-header">
           <span className="eyebrow">Programa</span>
           <h2>Seis verticales temáticas.</h2>
-          <p className="lead">El programa se estructura en torno a seis verticales que cubren los aspectos más críticos de la IA Agéntica aplicada al sector. Las entidades participantes pueden proponer retos sectoriales al comité de programa.</p>
+          <p className="lead">El programa cubre los retos más críticos de la IA Agéntica aplicada al sector asegurador: suscripción, siniestros, fraude y compliance. Las entidades participantes pueden proponer retos sectoriales al comité de programa.</p>
         </div>
         <div className="verticals-grid">
           {items.map(([title, desc], i) => (
@@ -316,24 +349,25 @@ function Verticals() {
 
 // ---------- Agenda ----------
 function Agenda() {
+  const [ref, inView] = useInView();
   const rows = [
-    ['09:00 – 09:30', 'Registro y acreditación', 'Networking'],
-    ['09:30 – 09:45', 'Apertura institucional', 'Apertura'],
-    ['09:45 – 10:30', 'Keynote: Estado del Arte de la IA Agéntica', 'Keynote', true],
-    ['10:30 – 11:15', 'Sesión: Guardrails, Compliance y Regulación', 'Sesión'],
-    ['11:15 – 11:45', 'Networking Coffee', 'Pausa'],
-    ['11:45 – 12:30', 'Sesión: Federated Learning y Privacidad de Datos', 'Sesión'],
-    ['12:30 – 13:15', 'Sesión: Arquitecturas del Conocimiento', 'Sesión'],
-    ['13:15 – 14:00', 'Panel: Futuro de los Servicios de Software + Ciberseguridad', 'Panel'],
-    ['14:00 – 16:00', 'Cóctel y Networking', 'Networking', true],
+    ['09:00', 'Registro y acreditación', 'Networking'],
+    ['09:30', 'Apertura institucional', 'Apertura'],
+    ['09:45', 'Keynote: Estado del Arte de la IA Agéntica', 'Keynote', true],
+    ['10:30', 'Guardrails, Compliance y Regulación', 'Sesión'],
+    ['11:15', 'Networking Coffee', 'Pausa'],
+    ['11:45', 'Federated Learning y Privacidad de Datos', 'Sesión'],
+    ['12:30', 'Arquitecturas del Conocimiento', 'Sesión'],
+    ['13:15', 'Panel: Futuro del Software y Ciberseguridad', 'Panel'],
+    ['14:00', 'Cóctel y Networking', 'Networking', true],
   ];
   return (
-    <section className="section" id="agenda">
-      <div className="container">
+    <section className="section" id="agenda" ref={ref}>
+      <div className={`container reveal ${inView ? 'in-view' : ''}`}>
         <div className="section-header">
-          <span className="eyebrow">Agenda Provisional</span>
-          <h2>Una jornada densa, diseñada para máxima densidad de valor.</h2>
-          <p className="lead">Ponencias de 30 minutos + 15 minutos de Q&amp;A. Las entidades participantes pueden proponer retos sectoriales al comité de programa.</p>
+          <span className="eyebrow">Agenda · 16 de junio</span>
+          <h2>Una jornada de alto nivel diseñada para la acción.</h2>
+          <p className="lead">Ponencias de 30 minutos con Q&amp;A abierto, diseñadas para los retos reales de las compañías aseguradoras. El programa recoge retos sectoriales propuestos por las entidades participantes.</p>
         </div>
         <div className="agenda-table">
           {rows.map(([time, title, tag, highlight], i) => (
@@ -351,35 +385,37 @@ function Agenda() {
 
 // ---------- Audiencia ----------
 function Audience() {
+  const [ref, inView] = useInView();
   return (
-    <section className="section" id="audiencia">
-      <div className="container">
+    <section className="section" id="audiencia" ref={ref}>
+      <div className={`container reveal ${inView ? 'in-view' : ''}`}>
         <div className="section-header">
           <span className="eyebrow">Perfil de la Audiencia</span>
           <h2>150 decisores. Cada inscripción, validada.</h2>
-          <p className="lead">Diseñado exclusivamente para directivos de primer nivel del sector financiero y asegurador. Aforo limitado para garantizar networking real.</p>
+          <p className="lead">Diseñado para los máximos responsables de compañías aseguradoras: vida y no vida, mutuas, reaseguradoras y grupos con presencia en distribución digital. Aforo limitado para garantizar networking real.</p>
         </div>
         <div className="audience-grid">
           <div className="audience-card">
             <h3>Perfil de los asistentes</h3>
-            <ul className="audience-list">
+            <ul className="audience-list" role="list">
               <li>CEOs y Directores Generales</li>
               <li>CIOs, CTOs y Chief AI Officers</li>
-              <li>Directores de Innovación y Transformación Digital</li>
               <li>Directores de Suscripción y Actuariales</li>
-              <li>Responsables de Siniestros y Operaciones</li>
-              <li>Directores de Distribución y Negocio</li>
+              <li>Directores de Siniestros y Operaciones</li>
+              <li>Directores de Innovación y Transformación Digital</li>
+              <li>Responsables de Compliance y Regulación</li>
+              <li>Directores de Distribución y Canales Digitales</li>
             </ul>
           </div>
           <div className="audience-card">
             <h3>Entidades representadas</h3>
-            <ul className="audience-list">
-              <li>Compañías aseguradoras (vida y no vida)</li>
-              <li>Grandes corredurías y agencias de suscripción</li>
-              <li>Mutualidades y mutuas de seguros</li>
-              <li>Entidades bancarias con negocio asegurador</li>
-              <li>Reguladores e instituciones (DGSFP, CNMV)</li>
-              <li>Gestoras de fondos y reaseguradoras</li>
+            <ul className="audience-list" role="list">
+              <li>Compañías aseguradoras de vida y salud</li>
+              <li>Aseguradoras de no vida (automóvil, hogar, multirriesgo, RC)</li>
+              <li>Mutuas y mutualidades de previsión social</li>
+              <li>Grupos aseguradores con actividad en distribución digital</li>
+              <li>Reaseguradoras con actividad en el mercado español</li>
+              <li>Reguladores e instituciones públicas (DGSFP, CNSS)</li>
             </ul>
           </div>
         </div>
@@ -390,10 +426,11 @@ function Audience() {
 
 // ---------- Paquetes ----------
 function Packages({ vertical }) {
-  const tierNames = vertical.tierNames; // ['GOLD','SILVER','BRONZE'] or ['ORO','PLATA','BRONCE']
+  const tierNames = vertical.tierNames;
+  const [ref, inView] = useInView(0.05);
   return (
-    <section className="section" id="paquetes">
-      <div className="container">
+    <section className="section" id="paquetes" ref={ref}>
+      <div className={`container reveal ${inView ? 'in-view' : ''}`}>
         <div className="section-header">
           <span className="eyebrow">Modalidades de Participación · {vertical.tierLabel}</span>
           <h2>Tres formas de contribuir. Plazas limitadas.</h2>
@@ -430,9 +467,10 @@ function Packages({ vertical }) {
           ))}
         </div>
 
-        <CompareTable tierNames={tierNames} tiers={vertical.tiers} />
+        <div className="compare-table-wrap">
+          <CompareTable tierNames={tierNames} tiers={vertical.tiers} />
+        </div>
 
-        {/* Detailed per-tier */}
         {vertical.tiers.map((t, i) => (
           <TierDetail key={i} tier={t} name={tierNames[i]} level={['gold','silver','bronze'][i]} />
         ))}
@@ -497,7 +535,7 @@ function TierDetail({ tier, name, level }) {
     {
       title: 'Contribución al Programa',
       items: level === 'gold'
-        ? [['Mesa editorial principal', <><strong>Un directivo de vuestra entidad</strong> en mesa de alto nivel</>], ['Propuesta de reto sectorial al comité de programa', true], ['Mención institucional en apertura y cierre del foro', true], ['Roundtable privada con 8–12 directivos pares', true]]
+        ? [['Mesa editorial principal', <><strong>Un directivo de vuestra compañía</strong> en mesa de alto nivel</>], ['Propuesta de reto sectorial al comité de programa', true], ['Mención institucional en apertura y cierre del foro', true], ['Roundtable privada con 8–12 directivos pares', true]]
         : level === 'silver'
         ? [['Mesa editorial', <>Participación <strong>opcional</strong> si aporta contenido real</>], ['Propuesta de reto sectorial', false], ['Mención en materiales del programa', true], ['Roundtable privada', false]]
         : [['Mesa editorial principal', false], ['Propuesta de reto sectorial', false], ['Mención institucional', false], ['Asistencia como entidad invitada', true]]
@@ -513,7 +551,7 @@ function TierDetail({ tier, name, level }) {
     {
       title: 'Acceso y Networking',
       items: level === 'gold'
-        ? [['Invitaciones VIP', <><strong>12 invitaciones</strong> (comité, innovación, negocio, tecnología)</>], ['Sesión privada de scouting con proveedores de IA', true], ['Mesa reservada en networking y cóctel', true], ['Introducciones 1:1 opt-in facilitadas por el equipo', true]]
+        ? [['Invitaciones VIP', <><strong>12 invitaciones</strong> (comité, actuarial, siniestros, tecnología)</>], ['Sesión privada de scouting con proveedores de IA', true], ['Mesa reservada en networking y cóctel', true], ['Introducciones 1:1 opt-in facilitadas por el equipo', true]]
         : level === 'silver'
         ? [['Invitaciones VIP', <><strong>6 invitaciones</strong> incluidas</>], ['Sesión privada de scouting', false], ['Mesa reservada en networking', false], ['Introducciones 1:1', false]]
         : [['Invitaciones institucionales', <><strong>1–3 invitaciones</strong> por invitación</>], ['Sesión privada de scouting', false], ['Mesa reservada', false], ['Introducciones 1:1', false]]
@@ -521,7 +559,7 @@ function TierDetail({ tier, name, level }) {
     {
       title: 'Activos Post-Evento',
       items: level === 'gold'
-        ? [['Informe ejecutivo', <><strong>Personalizado</strong> para vuestro comité de dirección</>], ['Benchmark cualitativo del sector', true], ['Mapa de proveedores filtrados y casos de uso', true], ['Acceso completo a grabaciones de sesiones', true]]
+        ? [['Informe ejecutivo', <><strong>Personalizado</strong> para vuestro comité de dirección</>], ['Benchmark cualitativo del sector asegurador', true], ['Mapa de proveedores filtrados y casos de uso', true], ['Acceso completo a grabaciones de sesiones', true]]
         : level === 'silver'
         ? [['Informe ejecutivo', <>Edición <strong>estándar</strong> del sector</>], ['Benchmark cualitativo del sector', true], ['Mapa de proveedores', true], ['Acceso a grabaciones de sesiones', true]]
         : [['Informe ejecutivo', false], ['Benchmark sectorial', false], ['Mapa de proveedores', false], ['Acceso a grabaciones', false]]
@@ -568,13 +606,14 @@ function TierDetail({ tier, name, level }) {
 
 // ---------- Reservar llamada (Cal.com embed) ----------
 function BookCall({ vertical }) {
+  const [ref, inView] = useInView();
   return (
-    <section className="section" id="reservar">
-      <div className="container">
+    <section className="section" id="reservar" ref={ref}>
+      <div className={`container reveal ${inView ? 'in-view' : ''}`}>
         <div className="section-header center">
           <span className="eyebrow" style={{ justifyContent: 'center' }}>Próximo paso</span>
-          <h2>Reserva hasta 60 min. con el equipo.</h2>
-          <p className="lead" style={{ margin: '0 auto' }}>Te contamos los detalles, resolvemos dudas y diseñamos el paquete que mejor se adapta a ti, idealmente en menos de 60 min. Sin compromiso.</p>
+          <h2>Habla con el equipo antes de decidir.</h2>
+          <p className="lead" style={{ margin: '0 auto' }}>60 minutos para entender los detalles, resolver dudas y diseñar la modalidad que mejor encaja con vuestros objetivos. Sin compromiso.</p>
         </div>
         <div style={{ maxWidth: 1100, margin: '0 auto', background: 'var(--bg-1)', border: '1px solid var(--line)', borderRadius: 'var(--r-xl)', overflow: 'hidden' }}>
           <iframe
@@ -608,8 +647,8 @@ function Adhesion({ vertical }) {
       <div className="container">
         <div className="section-header center">
           <span className="eyebrow" style={{ justifyContent: 'center' }}>Formulario de Adhesión</span>
-          <h2>¿Lo tienes claro? Formalízalo aquí.</h2>
-          <p className="lead" style={{ margin: '0 auto' }}>Rellena el formulario y nuestro equipo te enviará la factura y el acuerdo de sponsorship en menos de 24h.</p>
+          <h2>¿Ya tenéis claro lo que queréis? Formalizadlo aquí.</h2>
+          <p className="lead" style={{ margin: '0 auto' }}>Rellena el formulario y nuestro equipo os enviará el acuerdo de participación y la factura en menos de 24 horas.</p>
         </div>
         <div style={{ maxWidth: 780, margin: '0 auto', background: 'var(--bg-1)', border: '1px solid var(--line)', borderRadius: 'var(--r-xl)', padding: 32 }}>
           <iframe
@@ -644,14 +683,14 @@ function Footer({ vertical }) {
               <span>IA Agéntica</span>
             </a>
             <p style={{ fontSize: 13, color: 'var(--ink-3)', maxWidth: 320, marginTop: 16 }}>
-              El primer foro de IA Agéntica para decisores de banca y seguros en España. 16 de junio de 2026, Auditorio Beatriz Madrid.
+              El primer foro de IA Agéntica para compañías aseguradoras en España. 16 de junio de 2026, Auditorio Beatriz Madrid.
             </p>
           </div>
           <div>
-            <h5>Sponsors</h5>
+            <h5>Participación</h5>
             <ul>
-              <li><a href="#paquetes">Paquetes</a></li>
-              <li><a href="#reservar">Reservar llamada</a></li>
+              <li><a href="#paquetes">Modalidades</a></li>
+              <li><a href="#reservar">Hablar con el equipo</a></li>
               <li><a href="#adhesion">Formulario</a></li>
             </ul>
           </div>
@@ -686,18 +725,20 @@ function Page({ vertical }) {
   return (
     <>
       <Nav vertical={vertical} />
-      <Hero vertical={vertical} />
-      <Stats />
-      <AboutForo />
-      <Moment />
-      <About />
-      <Verticals />
-      <Agenda />
-      <Audience />
-      <Packages vertical={vertical} />
-      <BookCall vertical={vertical} />
-      <Adhesion vertical={vertical} />
-      <Footer vertical={vertical} />
+      <main id="main-content">
+        <Hero vertical={vertical} />
+        <Stats />
+        <AboutForo />
+        <Moment />
+        <About />
+        <Verticals />
+        <Agenda />
+        <Audience />
+        <Packages vertical={vertical} />
+        <BookCall vertical={vertical} />
+        <Adhesion vertical={vertical} />
+        <Footer vertical={vertical} />
+      </main>
     </>
   );
 }

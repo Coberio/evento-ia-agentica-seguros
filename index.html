@@ -4,8 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
-<title>Sponsorship Seguros · I Foro IA Agéntica 2026</title>
-<meta name="description" content="Patrocinio asegurador del I Foro de IA Agéntica para el sector financiero y asegurador." />
+<title>Sponsorship Aseguradoras · I Foro IA Agéntica 2026</title>
+<meta name="description" content="Participación institucional de compañías aseguradoras en el I Foro de IA Agéntica 2026." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Figtree:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
 <link rel="stylesheet" href="styles.css" />
 <style>
   :root {
@@ -13,10 +16,13 @@
     --accent-soft: rgba(16, 185, 129, 0.13);
     --accent-glow: rgba(16, 185, 129, 0.28);
     --accent-ink: #021a11;
+    --bg-0: #05070a;
+    --bg-1: #0a0d12;
   }
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">Saltar al contenido</a>
 <div id="root"></div>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
@@ -25,7 +31,7 @@
   window.VERTICAL = {
     key: 'seguros',
     label: 'Seguros',
-    preTitle: 'Participación Institucional · Seguros · 2026',
+    preTitle: 'Participación Institucional · Aseguradoras · 2026',
     tierLabel: 'Seguros',
     tierNames: ['IMPULSORA', 'COLABORADORA', 'PARTICIPANTE'],
     tiers: [
@@ -38,8 +44,8 @@
 <script type="text/babel" src="app.jsx"></script>
 <script type="text/babel">
   const vertical = Object.assign({}, window.VERTICAL, {
-    heroTitle: <>Lidere la <em>nueva era</em> de los seguros con IA Agéntica.</>,
-    heroSub: 'El único foro en España donde los máximos responsables del sector asegurador debaten el impacto real de los agentes autónomos en suscripción, siniestros y distribución. Alta dirección · Regla Chatham House · Sala mayoritariamente de entidades del sector, aforo curado.'
+    heroTitle: <>La IA Agéntica está redefiniendo la <em>suscripción, los siniestros y la distribución</em> aseguradora.</>,
+    heroSub: 'El único foro en España donde los máximos responsables de compañías aseguradoras debaten el impacto real de los agentes autónomos en underwriting, gestión de siniestros, pricing y distribución digital. Aseguradoras de vida y no vida, mutuas y reaseguradoras. Alta dirección · Regla Chatham House · Aforo curado.'
   });
   ReactDOM.createRoot(document.getElementById('root')).render(<Page vertical={vertical} />);
 </script>

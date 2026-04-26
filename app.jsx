@@ -723,6 +723,32 @@ function Footer({ vertical }) {
   );
 }
 
+// ---------- Video ----------
+function Video() {
+  const [ref, inView] = useInView();
+  return (
+    <section className="section" id="video" ref={ref}>
+      <div className={`container-narrow reveal ${inView ? 'in-view' : ''}`}>
+        <div className="section-header center">
+          <span className="eyebrow" style={{ justifyContent: 'center' }}>El Foro · 16 de junio</span>
+          <h2>Por qué este foro <em style={{ fontStyle: 'italic' }}>importa ahora</em>.</h2>
+          <p className="lead" style={{ margin: '0 auto' }}>Una pieza breve sobre lo que está en juego. Lo que escucharás dentro del foro va más allá.</p>
+        </div>
+        <div className="video-frame">
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/TWcwBZ5kvJg?rel=0&modestbranding=1"
+            title="I Foro IA Agéntica 2026"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // ---------- Page ----------
 function Page({ vertical }) {
   return (
@@ -733,6 +759,7 @@ function Page({ vertical }) {
         <Stats />
         <AboutForo />
         <Moment />
+        <Video />
         <About />
         <Verticals />
         <Agenda />

@@ -1,4 +1,4 @@
-// Sponsor landing — Seguros vertical
+// Sponsor landing — Tech vertical
 // Expects window.VERTICAL = { key, label, preTitle, tierLabel, tierNames, tiers }
 
 const { useState, useEffect, useMemo, useRef, useCallback } = React;
@@ -135,8 +135,8 @@ function Hero({ vertical }) {
                 <span className="value">Presencial · Chatham House</span>
               </div>
               <div>
-                <span className="label">Mercado</span>
-                <span className="value">~57.000 M€ primas sector 2024</span>
+                <span className="label">Audiencia</span>
+                <span className="value">Banca · Seguros · Mediación</span>
               </div>
             </div>
             <div className="hero-cta">
@@ -200,6 +200,7 @@ function useCountdown(isoTarget) {
 function Stats() {
   const [ref, inView] = useInView(0.4);
   const c150 = useCounter(150, inView, 1200);
+  const c100 = useCounter(100, inView, 1400);
   const c3000 = useCounter(3000, inView, 1600);
   return (
     <div className="stats-bar" ref={ref}>
@@ -208,8 +209,8 @@ function Stats() {
         <div className="stats-bar-label">Directivos C-Level</div>
       </div>
       <div className="stats-bar-item">
-        <div className="stats-bar-num">+7%</div>
-        <div className="stats-bar-label">Crecimiento anual del sector</div>
+        <div className="stats-bar-num">{inView ? c100 : 0}%</div>
+        <div className="stats-bar-label">Decisores con presupuesto</div>
       </div>
       <div className="stats-bar-item">
         <div className="stats-bar-num">{inView ? c3000.toLocaleString('es-ES') : 0}+</div>
@@ -231,18 +232,18 @@ function AboutForo() {
       <div className={`container reveal ${inView ? 'in-view' : ''}`}>
         <div className="section-header">
           <span className="eyebrow">El Foro</span>
-          <h2>El primer foro en España dedicado a la <em style={{ fontStyle: 'italic' }}>IA Agéntica</em> para el sector asegurador.</h2>
-          <p className="lead">Un encuentro único diseñado para reunir a los máximos responsables de compañías aseguradoras en un espacio de diálogo estratégico de alto nivel. Sin intermediarios, sin comerciales.</p>
+          <h2>El primer foro en España donde la <em style={{ fontStyle: 'italic' }}>IA Agéntica</em> deja de venderse y empieza a adoptarse.</h2>
+          <p className="lead">Un encuentro institucional diseñado para que los proveedores tecnológicos serios entren en conversación directa con los compradores reales del sector financiero y asegurador. Sin stands, sin pitches, sin ferias. Y precisamente por eso, la audiencia está aquí.</p>
         </div>
 
         <div className="reasons-grid">
           {[
-            ['01', 'Liderazgo sectorial', 'Posicionarse como una de las compañías que impulsa la conversación seria sobre IA Agéntica en seguros. No asistir al debate: liderarlo.'],
-            ['02', 'Posicionamiento institucional', 'Los agentes de IA están transformando suscripción, siniestros y distribución. Las compañías que encabecen esa conversación ahora determinarán los estándares del sector antes de que otros lo hagan.'],
-            ['03', 'Contribución editorial real', 'Un directivo de vuestra compañía participa en una mesa de alto nivel junto a pares del sector. El programa es curado: sin charlas comerciales, sin feria de proveedores.'],
-            ['04', 'Scouting cualificado', 'Acceso privado a soluciones específicas para aseguradoras: underwriting automation, FNOL y liquidación de siniestros con IA, detección de fraude, modelos predictivos de churn y pricing dinámico. Sin ferias masivas.'],
-            ['05', 'Activo interno para el comité', 'Post-evento: informe ejecutivo con benchmark del sector asegurador, mapa de proveedores, casos de uso en producción y riesgos detectados. Material directo para vuestro comité de dirección.'],
-            ['06', 'Marco regulatorio integrado', 'AI Act (sistemas de alto riesgo en Vida/Salud), Solvency II, DORA, IDD y supervisión DGSFP forman parte del programa desde el diseño, no son un añadido. Avalado por AEPD y DGSFP en el Sandbox Financiero.'],
+            ['01', 'Liderazgo de criterio, no de caseta', 'La única plataforma en España donde el equipo técnico de vuestra compañía aporta criterio en mesa editorial — no en una charla comercial. La audiencia se lo toma en serio precisamente por la regla de la casa: nada de pitches.'],
+            ['02', 'Conversación con los compradores reales', '150 C-level de banca, seguros y mediación, todos con presupuesto IA en 2026. Mesa, roundtable y networking, no stand. Cinco a diez conversaciones reales con quienes deciden valen más que cien leads sin cualificar.'],
+            ['03', 'Aportación editorial al programa', 'Un perfil técnico de vuestra compañía interviene en mesa o panel del foro, validado por el comité de programa. Reconocimiento como referente, no como sponsor. (Nivel Impulsora.)'],
+            ['04', 'Inteligencia de mercado fuera de RFP', 'Lo que se escucha en una roundtable Chatham House con CIOs y Directores de Suscripción no aparece en ningún RFP. Feedback real sobre fricciones de adopción, exigencias del regulador y prioridades del comité de inversión.'],
+            ['05', 'Co-posicionamiento en contexto editorial', 'Vuestra marca aparece junto a las tecnologías que el sector toma en serio. La diferenciación no se construye en una caseta: se construye en el contexto editorial donde se debate qué adopta el sector en 2026–2027.'],
+            ['06', 'Marco regulatorio compartido', 'AI Act (sistemas de alto riesgo), DORA, IDD y Solvency II también os afectan: vuestro producto vive dentro de esa regulación. El programa integra el marco legal desde el diseño, lo que se traduce en ventaja para vendor briefings posteriores.'],
           ].map(([num, title, desc], i) => (
             <div className={`reason reveal reveal-delay-${i + 1} ${inView ? 'in-view' : ''}`} key={num}>
               <div className="reason-num">{num}</div>
@@ -302,10 +303,76 @@ function Moment() {
     <section className="section" ref={ref}>
       <div className={`container-narrow reveal ${inView ? 'in-view' : ''}`}>
         <div className="moment-block">
-          <span className="eyebrow" style={{ justifyContent: 'center' }}>2026 · Punto de inflexión</span>
-          <h2 style={{ marginTop: 24 }}>El momento de la <em style={{ fontStyle: 'italic' }}>IA Agéntica</em>.</h2>
-          <p>Las aseguradoras que adopten agentes autónomos en suscripción, siniestros y distribución antes de 2027 fijarán los márgenes de referencia del sector. Las que esperen, competirán con las condiciones que otras hayan establecido.</p>
-          <div className="highlight">Participar ahora es liderar la conversación antes de que otros lo hagan</div>
+          <span className="eyebrow" style={{ justifyContent: 'center' }}>2026–2027 · Punto de inflexión</span>
+          <h2 style={{ marginTop: 24 }}>El momento de la <em style={{ fontStyle: 'italic' }}>adopción</em>.</h2>
+          <p>En 2026–2027 se decide qué stack de IA Agéntica entra en producción en banca, seguros y distribución española. Las tecnologías que entren en conversación directa con los decisores ahora fijarán el estándar. Las que se queden en ferias, competirán con las elegidas a posteriori.</p>
+          <div className="highlight">Ser referente no es estar presente — es estar en mesa</div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- Renuncias vs Recibes ----------
+function ContrastBlock() {
+  const [ref, inView] = useInView();
+  return (
+    <section className="section" ref={ref}>
+      <div className={`container reveal ${inView ? 'in-view' : ''}`}>
+        <div className="section-header">
+          <span className="eyebrow">La promesa de marca</span>
+          <h2>El sponsorship más exigente. Y por eso, <em style={{ fontStyle: 'italic' }}>el más eficaz</em>.</h2>
+          <p className="lead">El acceso lo paga la coherencia. Renunciar al pitch es lo que activa la conversación.</p>
+        </div>
+        <div className="threat-block">
+          <div className="threat-col">
+            <h4 style={{ fontFamily: 'var(--ff-body)', fontWeight: 600, fontSize: 15, color: 'var(--ink-2)', marginBottom: 24, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Lo que renuncias a hacer</h4>
+            <ul className="threat-list">
+              <li>Charlas comerciales o demos de producto en sala</li>
+              <li>Stand físico o material promocional desplegado</li>
+              <li>Reparto masivo de leads sin cualificar</li>
+              <li>Vender en pasillos como reemplazo de la mesa</li>
+              <li>Métricas vanity (escaneos QR, leads en frío)</li>
+              <li>Repetir lo que ya funcionó hace cinco ferias</li>
+            </ul>
+          </div>
+          <div className="threat-col opportunity">
+            <h4 style={{ fontFamily: 'var(--ff-body)', fontWeight: 600, fontSize: 15, color: 'var(--accent)', marginBottom: 24, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Lo que recibes a cambio</h4>
+            <ul className="threat-list pro">
+              <li>Mesa o panel editorial validado por el comité técnico</li>
+              <li>150 C-level con presupuesto IA 2026 confirmado</li>
+              <li>Roundtable privada con 8–12 buyers + peers</li>
+              <li>Introducciones 1:1 facilitadas según ICP (post-evento, opt-in)</li>
+              <li>Inteligencia de mercado fuera de RFP</li>
+              <li>Posicionamiento junto a las tecnologías que el sector toma en serio</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- Video ----------
+function Video() {
+  const [ref, inView] = useInView();
+  return (
+    <section className="section" id="video" ref={ref}>
+      <div className={`container-narrow reveal ${inView ? 'in-view' : ''}`}>
+        <div className="section-header center">
+          <span className="eyebrow" style={{ justifyContent: 'center' }}>El Auditorio · Madrid</span>
+          <h2>El mejor lugar para <em style={{ fontStyle: 'italic' }}>celebrar este foro</em>.</h2>
+          <p className="lead" style={{ margin: '0 auto' }}>Un recorrido por El Beatriz, el auditorio que hemos elegido para acoger esta primera edición. El espacio también forma parte del mensaje.</p>
+        </div>
+        <div className="video-frame">
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/TWcwBZ5kvJg?rel=0&modestbranding=1"
+            title="I Foro IA Agéntica 2026"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            loading="lazy"
+          />
         </div>
       </div>
     </section>
@@ -316,12 +383,12 @@ function Moment() {
 function Verticals() {
   const [ref, inView] = useInView();
   const items = [
-    ['Estado del Arte de la IA Agéntica', 'Panorama global de los agentes de IA: dónde estamos, hacia dónde vamos y qué impacto real están teniendo en seguros. Casos en producción, benchmarks y lecciones aprendidas.'],
-    ['Guardrails, Compliance y Regulación', 'Cómo diseñar sistemas de IA Agéntica que cumplan con DORA, AI Act y normativa sectorial. Frameworks de gobernanza, auditoría algorítmica y control humano.'],
-    ['Federated Learning y Privacidad', 'Entrenamiento colaborativo de modelos sin compartir datos sensibles de pólizas o siniestros. IA Agéntica respetando privacidad y protección de datos.'],
-    ['Arquitecturas del Conocimiento', 'RAG, grafos de conocimiento y sistemas multiagente: las arquitecturas técnicas detrás de los agentes más avanzados del sector asegurador.'],
-    ['Futuro de los Servicios de Software', 'Cómo la IA Agéntica redefine los modelos de negocio SaaS, la relación proveedor-aseguradora y la cadena de valor tecnológica.'],
-    ['Ciberseguridad e IA Agéntica', 'Nuevos vectores de amenaza que introducen los agentes autónomos y estrategias de defensa. Seguridad ofensiva y defensiva en el contexto asegurador.'],
+    ['Estado del Arte de la IA Agéntica', 'Panorama global de los agentes de IA: dónde estamos, hacia dónde vamos y qué impacto real están teniendo en banca, seguros y distribución. Casos en producción, benchmarks y lecciones aprendidas — donde la audiencia decide qué adopta.'],
+    ['Guardrails, Compliance y Regulación', 'Cómo diseñar sistemas de IA Agéntica que cumplan con AI Act, DORA y normativa sectorial. Frameworks de gobernanza, auditoría algorítmica y control humano: el primer filtro de cualquier vendor briefing serio.'],
+    ['Federated Learning y Privacidad', 'Entrenamiento colaborativo de modelos sin compartir datos sensibles de pólizas, siniestros o cartera. La arquitectura técnica que cualquier proveedor debe entender para vender al sector.'],
+    ['Arquitecturas del Conocimiento', 'RAG, grafos de conocimiento y sistemas multiagente: las arquitecturas técnicas detrás de los agentes que el sector evaluará en los próximos doce meses.'],
+    ['Futuro de los Servicios de Software', 'Cómo la IA Agéntica redefine los modelos de negocio SaaS, la relación proveedor-cliente y la cadena de valor tecnológica del sector financiero y asegurador.'],
+    ['Ciberseguridad e IA Agéntica', 'Nuevos vectores de amenaza que introducen los agentes autónomos y estrategias de defensa. Seguridad ofensiva y defensiva: el otro frente que cualquier RFP del sector va a evaluar.'],
   ];
   return (
     <section className="section" id="verticales" ref={ref}>
@@ -329,7 +396,7 @@ function Verticals() {
         <div className="section-header">
           <span className="eyebrow">Programa</span>
           <h2>Seis verticales temáticas.</h2>
-          <p className="lead">El programa cubre los retos más críticos de la IA Agéntica aplicada al sector asegurador: suscripción, siniestros, fraude y compliance. Las entidades participantes pueden proponer retos sectoriales al comité de programa.</p>
+          <p className="lead">El programa cubre los temas técnicos donde la IA Agéntica define su adopción real en el sector financiero y asegurador. Las entidades tecnológicas participantes pueden proponer retos técnicos al comité de programa.</p>
         </div>
         <div className="verticals-grid">
           {items.map(([title, desc], i) => (
@@ -351,32 +418,60 @@ function Verticals() {
 function Agenda() {
   const [ref, inView] = useInView();
   const rows = [
-    ['09:00', 'Registro y acreditación', 'Networking'],
-    ['09:30', 'Apertura institucional', 'Apertura'],
-    ['09:45', 'Keynote: Estado del Arte de la IA Agéntica', 'Keynote', true],
-    ['10:30', 'Guardrails, Compliance y Regulación', 'Sesión'],
-    ['11:15', 'Networking Coffee', 'Pausa'],
-    ['11:45', 'Federated Learning y Privacidad de Datos', 'Sesión'],
-    ['12:30', 'Arquitecturas del Conocimiento', 'Sesión'],
-    ['13:15', 'Panel: Futuro del Software y Ciberseguridad', 'Panel'],
-    ['14:00', 'Cóctel y Networking', 'Networking', true],
+    { type: 'row',   data: ['09:00', 'Acreditaciones', 'Apertura'] },
+    { type: 'row',   data: ['09:30', 'Bienvenida institucional', 'Bienvenida · 15 min'] },
+    { type: 'block', label: 'BLOQUE I · SABER', sub: 'Ecosistema formativo', color: '#06D6A0' },
+    { type: 'row',   data: ['09:45', 'Observatorio de IA Agéntica en Servicios Financieros', 'Sesión · 15 min'] },
+    { type: 'row',   data: ['10:00', 'Democratizando la Formación y Capacitación en IA', 'Sesión · 15 min'] },
+    { type: 'row',   data: ['10:15', 'Creando itinerarios avanzados para Dptos. de IA a la vanguardia', 'Sesión · 15 min'] },
+    { type: 'row',   data: ['10:30', '🔥 Fireside Talk Bloque I · Micrófono Abierto · Chatham House', 'Fireside Talk', true] },
+    { type: 'row',   data: ['11:00', 'Pausa café networking', 'Pausa · 30 min'] },
+    { type: 'block', label: 'BLOQUE II · HACER', sub: 'Tecnológicas y consultoras', color: '#6366F1' },
+    { type: 'row',   data: ['11:30', 'Consultoría en IA Agéntica — Lo que no sale en ningún RFP', 'Sesión · 15 min'] },
+    { type: 'row',   data: ['11:45', 'Caso de éxito: colaboración Startup de IA con Gran Corporación', 'Sesión · 15 min'] },
+    { type: 'row',   data: ['12:00', 'Caso de éxito en el Sandbox Financiero Español', 'Sesión · 15 min'] },
+    { type: 'row',   data: ['12:15', '🔥 Fireside Talk Bloque II · Micrófono Abierto · Chatham House', 'Fireside Talk', true] },
+    { type: 'block', label: 'BLOQUE III · LIDERAR', sub: 'Casos en producción', color: '#F59E0B' },
+    { type: 'row',   data: ['12:45', 'Cambio Cultural en la Nueva Era del trabajo híbrido humano-máquina', 'Sesión · 15 min'] },
+    { type: 'row',   data: ['13:00', 'Convivencia con las nuevas especies de esta Nueva Era de IA Agéntica', 'Sesión · 15 min'] },
+    { type: 'row',   data: ['13:15', '🔥 Fireside Talk Bloque III · Micrófono Abierto · Chatham House', 'Fireside Talk', true] },
+    { type: 'row',   data: ['13:45', 'Conclusiones + presentación del Informe Post-Foro', 'Cierre · 15 min'] },
+    { type: 'row',   data: ['14:00', '🍷 Vino español · Networking de cierre', 'Networking', true] },
+    { type: 'row',   data: ['15:00', '☕ Café de Despedida', 'Networking · hasta las 15:30'] },
   ];
   return (
     <section className="section" id="agenda" ref={ref}>
       <div className={`container reveal ${inView ? 'in-view' : ''}`}>
         <div className="section-header">
-          <span className="eyebrow">Agenda · 16 de junio</span>
-          <h2>Una jornada de alto nivel diseñada para la acción.</h2>
-          <p className="lead">Ponencias de 30 minutos con Q&amp;A abierto, diseñadas para los retos reales de las compañías aseguradoras. El programa recoge retos sectoriales propuestos por las entidades participantes.</p>
+          <span className="eyebrow">Agenda · 16 de junio · 09:00–15:30</span>
+          <h2>Tres bloques. Tres perspectivas. Un ecosistema.</h2>
+          <p className="lead">Presentaciones de 15 minutos seguidas de Fireside Talk con micrófono abierto y Chatham House tras cada bloque. Sin pitches, sin slides de ventas — solo conversación real entre quienes deciden.</p>
         </div>
         <div className="agenda-table">
-          {rows.map(([time, title, tag, highlight], i) => (
-            <div className={`agenda-row ${highlight ? 'highlight' : ''}`} key={i}>
-              <div className="agenda-time">{time}</div>
-              <div className="agenda-title">{title}</div>
-              <div className="agenda-tag">{tag}</div>
-            </div>
-          ))}
+          {rows.map((item, i) => {
+            if (item.type === 'block') {
+              return (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  padding: '10px 16px', margin: '20px 0 6px',
+                  borderLeft: `3px solid ${item.color}`,
+                  background: `${item.color}18`,
+                  borderRadius: '0 8px 8px 0'
+                }}>
+                  <span style={{ fontFamily: 'var(--ff-display)', fontWeight: 700, fontSize: 12, letterSpacing: '0.1em', textTransform: 'uppercase', color: item.color }}>{item.label}</span>
+                  <span style={{ fontSize: 12, color: 'var(--ink-3)', fontStyle: 'italic' }}>{item.sub}</span>
+                </div>
+              );
+            }
+            const [time, title, tag, highlight] = item.data;
+            return (
+              <div className={`agenda-row ${highlight ? 'highlight' : ''}`} key={i}>
+                <div className="agenda-time">{time}</div>
+                <div className="agenda-title">{title}</div>
+                <div className="agenda-tag">{tag}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -391,31 +486,30 @@ function Audience() {
       <div className={`container reveal ${inView ? 'in-view' : ''}`}>
         <div className="section-header">
           <span className="eyebrow">Perfil de la Audiencia</span>
-          <h2>150 decisores. Cada inscripción, validada.</h2>
-          <p className="lead">Diseñado para los máximos responsables de compañías aseguradoras: vida y no vida, mutuas, reaseguradoras y grupos con presencia en distribución digital. Aforo limitado para garantizar networking real.</p>
+          <h2>150 decisores. <em style={{ fontStyle: 'italic' }}>100%</em> compradores reales.</h2>
+          <p className="lead">Si vendes IA Agéntica al sector financiero, asegurador o de mediación en España, esta es la sala donde están tus compradores. Cada inscripción está validada por el equipo de programa. Aforo limitado para garantizar networking real.</p>
         </div>
         <div className="audience-grid">
           <div className="audience-card">
-            <h3>Perfil de los asistentes</h3>
+            <h3>Compradores en sala</h3>
             <ul className="audience-list" role="list">
               <li>CEOs y Directores Generales</li>
               <li>CIOs, CTOs y Chief AI Officers</li>
-              <li>Directores de Suscripción y Actuariales</li>
-              <li>Directores de Siniestros y Operaciones</li>
               <li>Directores de Innovación y Transformación Digital</li>
-              <li>Responsables de Compliance y Regulación</li>
-              <li>Directores de Distribución y Canales Digitales</li>
+              <li>Directores de Suscripción, Siniestros, Operaciones y Comercial</li>
+              <li>Responsables de Compliance, Riesgos y Regulación</li>
+              <li>Comités de inversión y arquitectura tecnológica</li>
             </ul>
           </div>
           <div className="audience-card">
-            <h3>Entidades representadas</h3>
+            <h3>Sectores con presupuesto IA 2026</h3>
             <ul className="audience-list" role="list">
-              <li>Compañías aseguradoras de vida y salud</li>
-              <li>Aseguradoras de no vida (automóvil, hogar, multirriesgo, RC)</li>
-              <li>Mutuas y mutualidades de previsión social</li>
-              <li>Grupos aseguradores con actividad en distribución digital</li>
-              <li>Reaseguradoras con actividad en el mercado español</li>
-              <li>Reguladores e instituciones públicas (DGSFP, CNSS)</li>
+              <li>Bancos con actividad aseguradora (filiales, OBSV, neobancos)</li>
+              <li>Compañías aseguradoras de vida y no vida</li>
+              <li>Mutuas y reaseguradoras con actividad en España</li>
+              <li>Grandes corredurías y redes de distribución</li>
+              <li>MGA y agencias de suscripción delegada</li>
+              <li>Reguladores e instituciones (BdE, DGSFP, AEPD, CNMC)</li>
             </ul>
           </div>
         </div>
@@ -434,7 +528,7 @@ function Packages({ vertical }) {
         <div className="section-header">
           <span className="eyebrow">Modalidades de Participación · {vertical.tierLabel}</span>
           <h2>Tres formas de contribuir. Plazas limitadas.</h2>
-          <p className="lead">Cada modalidad define el nivel de contribución institucional, acceso editorial y participación en el programa. Sin stands, sin ferias, sin intervenciones comerciales.</p>
+          <p className="lead">Cada modalidad define el nivel de contribución editorial, acceso a roundtables y posicionamiento institucional. Sin stands, sin pitches, sin intervenciones comerciales.</p>
         </div>
 
         <div className="tiers-intro">
@@ -494,28 +588,28 @@ function CompareTable({ tierNames, tiers }) {
       </thead>
       <tbody>
         <tr className="section-row"><td colSpan="4">Contribución al Programa</td></tr>
-        <tr><td className="feature">Directivo en mesa editorial principal</td><td>{yes}</td><td className="highlight">Opcional</td><td>{no}</td></tr>
-        <tr><td className="feature">Propuesta de reto sectorial al programa</td><td>{yes}</td><td>{no}</td><td>{no}</td></tr>
+        <tr><td className="feature">Mesa o panel técnico (validado por el comité)</td><td>{yes}</td><td className="highlight">Opcional</td><td>{no}</td></tr>
+        <tr><td className="feature">Propuesta de reto técnico al programa</td><td>{yes}</td><td>{no}</td><td>{no}</td></tr>
         <tr><td className="feature">Mención institucional en apertura y cierre</td><td>{yes}</td><td>{yes}</td><td>{no}</td></tr>
-        <tr><td className="feature">Roundtable privada (8–12 directivos pares)</td><td>{yes}</td><td>{no}</td><td>{no}</td></tr>
+        <tr><td className="feature">Roundtable privada (8–12 buyers + peers)</td><td>{yes}</td><td>{no}</td><td>{no}</td></tr>
 
         <tr className="section-row"><td colSpan="4">Visibilidad Institucional</td></tr>
         <tr><td className="feature">Logo en materiales del foro</td><td className="highlight">Impulsora</td><td>Colaboradora</td><td>{no}</td></tr>
         <tr><td className="feature">Presencia en acreditaciones</td><td>{yes}</td><td>{yes}</td><td>{no}</td></tr>
-        <tr><td className="feature">Cobranding en informe post-evento</td><td>{yes}</td><td>{no}</td><td>{no}</td></tr>
+        <tr><td className="feature">Cobranding en informe ejecutivo del sector</td><td>{yes}</td><td>{no}</td><td>{no}</td></tr>
         <tr><td className="feature">Menciones en RRSS + Newsletter IIA</td><td className="highlight">Periódica + destacada</td><td>{yes}</td><td>{no}</td></tr>
         <tr><td className="feature">Nota de prensa oficial</td><td>{yes}</td><td>{yes}</td><td>{no}</td></tr>
 
         <tr className="section-row"><td colSpan="4">Acceso y Networking</td></tr>
-        <tr><td className="feature">Invitaciones VIP incluidas</td><td className="highlight">12</td><td>6</td><td>1–3</td></tr>
-        <tr><td className="feature">Sesión privada de scouting con proveedores</td><td>{yes}</td><td>{no}</td><td>{no}</td></tr>
+        <tr><td className="feature">Pases de equipo incluidos</td><td className="highlight">12</td><td>6</td><td>1–3</td></tr>
+        <tr><td className="feature">Introducciones 1:1 facilitadas (opt-in)</td><td className="highlight">5+</td><td>2–3</td><td>{no}</td></tr>
+        <tr><td className="feature">Acceso a roundtables editoriales</td><td>{yes}</td><td>{no}</td><td>{no}</td></tr>
         <tr><td className="feature">Mesa reservada en networking y cóctel</td><td>{yes}</td><td>{no}</td><td>{no}</td></tr>
-        <tr><td className="feature">Introducciones 1:1 opt-in facilitadas</td><td>{yes}</td><td>{no}</td><td>{no}</td></tr>
 
         <tr className="section-row"><td colSpan="4">Activos Post-Evento</td></tr>
-        <tr><td className="feature">Informe ejecutivo para comité de dirección</td><td className="highlight">Personalizado</td><td>Estándar</td><td>{no}</td></tr>
-        <tr><td className="feature">Benchmark cualitativo del sector</td><td>{yes}</td><td>{yes}</td><td>{no}</td></tr>
-        <tr><td className="feature">Mapa de proveedores filtrados</td><td>{yes}</td><td>{yes}</td><td>{no}</td></tr>
+        <tr><td className="feature">Informe ejecutivo del sector</td><td className="highlight">Personalizado</td><td>Estándar</td><td>{no}</td></tr>
+        <tr><td className="feature">Síntesis de retos técnicos por sector</td><td>{yes}</td><td>{yes}</td><td>{no}</td></tr>
+        <tr><td className="feature">Mapa de proveedores y casos de uso</td><td>{yes}</td><td>{yes}</td><td>{no}</td></tr>
         <tr><td className="feature">Acceso a grabaciones de sesiones</td><td>{yes}</td><td>{yes}</td><td>{no}</td></tr>
 
         <tr className="section-row"><td colSpan="4">Participación</td></tr>
@@ -535,34 +629,34 @@ function TierDetail({ tier, name, level }) {
     {
       title: 'Contribución al Programa',
       items: level === 'gold'
-        ? [['Mesa editorial principal', <><strong>Un directivo de vuestra compañía</strong> en mesa de alto nivel</>], ['Propuesta de reto sectorial al comité de programa', true], ['Mención institucional en apertura y cierre del foro', true], ['Roundtable privada con 8–12 directivos pares', true]]
+        ? [['Mesa o panel técnico', <><strong>Un perfil técnico de vuestra compañía</strong> en mesa editorial validada</>], ['Propuesta de reto técnico al comité de programa', true], ['Mención institucional en apertura y cierre del foro', true], ['Roundtable privada con 8–12 buyers + peers', true]]
         : level === 'silver'
-        ? [['Mesa editorial', <>Participación <strong>opcional</strong> si aporta contenido real</>], ['Propuesta de reto sectorial', false], ['Mención en materiales del programa', true], ['Roundtable privada', false]]
-        : [['Mesa editorial principal', false], ['Propuesta de reto sectorial', false], ['Mención institucional', false], ['Asistencia como entidad invitada', true]]
+        ? [['Mesa o panel técnico', <>Participación <strong>opcional</strong> si aporta contenido editorial real</>], ['Propuesta de reto técnico', false], ['Mención en materiales del programa', true], ['Roundtable privada', false]]
+        : [['Mesa o panel técnico', false], ['Propuesta de reto técnico', false], ['Mención institucional', false], ['Asistencia como entidad invitada', true]]
     },
     {
       title: 'Visibilidad Institucional',
       items: level === 'gold'
-        ? [['Logo', <><strong>Entidad Impulsora</strong> — posición principal en materiales</>], ['Cobranding en informe post-evento', true], ['Menciones en RRSS', <><strong>Periódicas y destacadas</strong></>], ['Newsletter IIA (3.000+ alumni)', true], ['Nota de prensa oficial', true], ['Presencia en acreditaciones y señalización', true]]
+        ? [['Logo', <><strong>Entidad Impulsora</strong> — posición principal en materiales</>], ['Cobranding en informe ejecutivo del sector', true], ['Menciones en RRSS', <><strong>Periódicas y destacadas</strong></>], ['Newsletter IIA (3.000+ alumni)', true], ['Nota de prensa oficial', true], ['Presencia en acreditaciones y señalización', true]]
         : level === 'silver'
-        ? [['Logo', <><strong>Entidad Colaboradora</strong> en materiales del foro</>], ['Cobranding en informe post-evento', false], ['Menciones en RRSS', true], ['Newsletter IIA (3.000+ alumni)', true], ['Nota de prensa oficial', true], ['Presencia en acreditaciones', true]]
+        ? [['Logo', <><strong>Entidad Colaboradora</strong> en materiales del foro</>], ['Cobranding en informe ejecutivo', false], ['Menciones en RRSS', true], ['Newsletter IIA (3.000+ alumni)', true], ['Nota de prensa oficial', true], ['Presencia en acreditaciones', true]]
         : [['Logo en materiales', false], ['Cobranding', false], ['Menciones en RRSS', false], ['Newsletter IIA', false], ['Nota de prensa', false], ['Acreditaciones de entidad', false]]
     },
     {
       title: 'Acceso y Networking',
       items: level === 'gold'
-        ? [['Invitaciones VIP', <><strong>12 invitaciones</strong> (comité, actuarial, siniestros, tecnología)</>], ['Sesión privada de scouting con proveedores de IA', true], ['Mesa reservada en networking y cóctel', true], ['Introducciones 1:1 opt-in facilitadas por el equipo', true]]
+        ? [['Pases de equipo', <><strong>12 pases</strong> (técnico, comercial, dirección)</>], ['Introducciones 1:1 facilitadas según ICP', <><strong>5+</strong> introducciones cualificadas (post-evento, opt-in)</>], ['Acceso a roundtables editoriales del comité', true], ['Mesa reservada en networking y cóctel', true]]
         : level === 'silver'
-        ? [['Invitaciones VIP', <><strong>6 invitaciones</strong> incluidas</>], ['Sesión privada de scouting', false], ['Mesa reservada en networking', false], ['Introducciones 1:1', false]]
-        : [['Invitaciones institucionales', <><strong>1–3 invitaciones</strong> por invitación</>], ['Sesión privada de scouting', false], ['Mesa reservada', false], ['Introducciones 1:1', false]]
+        ? [['Pases de equipo', <><strong>6 pases</strong> incluidos</>], ['Introducciones 1:1 facilitadas', <><strong>2–3</strong> introducciones cualificadas</>], ['Acceso a roundtables editoriales', false], ['Mesa reservada en networking', false]]
+        : [['Pases institucionales', <><strong>1–3 pases</strong> por invitación</>], ['Introducciones 1:1', false], ['Roundtables editoriales', false], ['Mesa reservada', false]]
     },
     {
       title: 'Activos Post-Evento',
       items: level === 'gold'
-        ? [['Informe ejecutivo', <><strong>Personalizado</strong> para vuestro comité de dirección</>], ['Benchmark cualitativo del sector asegurador', true], ['Mapa de proveedores filtrados y casos de uso', true], ['Acceso completo a grabaciones de sesiones', true]]
+        ? [['Informe ejecutivo del sector', <><strong>Personalizado</strong> — incluye benchmark + posicionamiento competitivo</>], ['Síntesis de retos técnicos por sector', true], ['Mapa de proveedores y casos de uso', true], ['Acceso completo a grabaciones de sesiones', true]]
         : level === 'silver'
-        ? [['Informe ejecutivo', <>Edición <strong>estándar</strong> del sector</>], ['Benchmark cualitativo del sector', true], ['Mapa de proveedores', true], ['Acceso a grabaciones de sesiones', true]]
-        : [['Informe ejecutivo', false], ['Benchmark sectorial', false], ['Mapa de proveedores', false], ['Acceso a grabaciones', false]]
+        ? [['Informe ejecutivo del sector', <>Edición <strong>estándar</strong></>], ['Síntesis de retos técnicos por sector', true], ['Mapa de proveedores', true], ['Acceso a grabaciones de sesiones', true]]
+        : [['Informe ejecutivo', false], ['Síntesis técnica', false], ['Mapa de proveedores', false], ['Acceso a grabaciones', false]]
     }
   ];
 
@@ -613,7 +707,7 @@ function BookCall({ vertical }) {
         <div className="section-header center">
           <span className="eyebrow" style={{ justifyContent: 'center' }}>Próximo paso</span>
           <h2>Habla con el equipo antes de decidir.</h2>
-          <p className="lead" style={{ margin: '0 auto' }}>60 minutos para entender los detalles, resolver dudas y diseñar la modalidad que mejor encaja con vuestros objetivos. Sin compromiso.</p>
+          <p className="lead" style={{ margin: '0 auto' }}>60 minutos para entender los detalles, alinear ICP y diseñar la modalidad que mejor encaja con vuestros objetivos. Sin compromiso.</p>
         </div>
         <div style={{ maxWidth: 1100, margin: '0 auto', background: 'var(--bg-1)', border: '1px solid var(--line)', borderRadius: 'var(--r-xl)', overflow: 'hidden' }}>
           <iframe
@@ -686,7 +780,7 @@ function Footer({ vertical }) {
               <span>IA Agéntica</span>
             </a>
             <p style={{ fontSize: 13, color: 'var(--ink-3)', maxWidth: 320, marginTop: 16 }}>
-              El primer foro de IA Agéntica para compañías aseguradoras en España. 16 de junio de 2026, Auditorio El Beatriz Madrid.
+              El primer foro de IA Agéntica para proveedores tecnológicos del sector financiero y asegurador en España. 16 de junio de 2026, Auditorio El Beatriz Madrid.
             </p>
           </div>
           <div>
@@ -723,32 +817,6 @@ function Footer({ vertical }) {
   );
 }
 
-// ---------- Video ----------
-function Video() {
-  const [ref, inView] = useInView();
-  return (
-    <section className="section" id="video" ref={ref}>
-      <div className={`container-narrow reveal ${inView ? 'in-view' : ''}`}>
-        <div className="section-header center">
-          <span className="eyebrow" style={{ justifyContent: 'center' }}>El Auditorio · Madrid</span>
-          <h2>El mejor lugar para <em style={{ fontStyle: 'italic' }}>celebrar este foro</em>.</h2>
-          <p className="lead" style={{ margin: '0 auto' }}>Un recorrido por El Beatriz, el auditorio que hemos elegido para acoger esta primera edición. El espacio también forma parte del mensaje.</p>
-        </div>
-        <div className="video-frame">
-          <iframe
-            src="https://www.youtube-nocookie.com/embed/TWcwBZ5kvJg?rel=0&modestbranding=1"
-            title="I Foro IA Agéntica 2026"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            loading="lazy"
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // ---------- Page ----------
 function Page({ vertical }) {
   return (
@@ -759,6 +827,7 @@ function Page({ vertical }) {
         <Stats />
         <AboutForo />
         <Moment />
+        <ContrastBlock />
         <Video />
         <About />
         <Verticals />
